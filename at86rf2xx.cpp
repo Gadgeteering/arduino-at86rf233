@@ -45,7 +45,7 @@ AT86RF2XX::AT86RF2XX() {}
 
 int AT86RF2XX::init(int cs_pin_, int int_pin_, int sleep_pin_, int reset_pin_)
 {
-    Serial.println("[at86rf2xx] Booting radio device.");
+    SerialUSB.println("[at86rf2xx] Booting radio device.");
 
     /* initialize device descriptor */
     cs_pin = cs_pin_;
@@ -86,13 +86,13 @@ int AT86RF2XX::init(int cs_pin_, int int_pin_, int sleep_pin_, int reset_pin_)
     /* test if the SPI is set up correctly and the device is responding */
     byte part_num = reg_read(AT86RF2XX_REG__PART_NUM);
     if (part_num != AT86RF233_PARTNUM) {
-        Serial.println("[at86rf2xx] Error: unable to read correct part number.");
+        SerialUSB.println("[at86rf2xx] Error: unable to read correct part number.");
         return -1;
     }
-    Serial.print("[at86rf2xx] Detected part #: 0x");
-    Serial.println(part_num, HEX);
-    Serial.print("[at86rf2xx] Version: 0x");
-    Serial.println(reg_read(AT86RF2XX_REG__VERSION_NUM), HEX);
+    SerialUSB.print("[at86rf2xx] Detected part #: 0x");
+    SerialUSB.println(part_num, HEX);
+    SerialUSB.print("[at86rf2xx] Version: 0x");
+    SerialUSB.println(reg_read(AT86RF2XX_REG__VERSION_NUM), HEX);
 
     /* reset device to default values and put it into RX state */
     reset();
@@ -159,7 +159,7 @@ void AT86RF2XX::reset()
     /* go into RX state */
     set_state(AT86RF2XX_STATE_RX_AACK_ON);
 
-    Serial.println("[at86rf2xx] Reset complete.");
+    SerialUSB.println("[at86rf2xx] Reset complete.");
 }
 
 bool AT86RF2XX::cca()
@@ -192,7 +192,7 @@ size_t AT86RF2XX::send(uint8_t *data, size_t len)
 {
     /* check data length */
     if (len > AT86RF2XX_MAX_PKT_LENGTH) {
-        Serial.println("[at86rf2xx] Error: Data to send exceeds max packet size.");
+        SerialUSB.println("[at86rf2xx] Error: Data to send exceeds max packet size.");
         return 0;
     }
     AT86RF2XX::tx_prepare();
